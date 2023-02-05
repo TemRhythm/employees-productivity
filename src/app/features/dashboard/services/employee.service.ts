@@ -59,12 +59,15 @@ export class EmployeeService {
       map((employeeWithShifts) =>
         employeeWithShifts.map((employeeWithShifts) => {
           let msFromMidnight = 0;
-          const msByDays: number[] = [0];
+          const msByDays: number[] = [];
           for (const shift of employeeWithShifts.shifts) {
             const clockInDate = new Date(shift.clockIn);
             const clockOutDate = new Date(shift.clockOut);
             if (clockInDate.getDate() === clockOutDate.getDate()) {
               msByDays[msByDays.length - 1] += shift.clockOut - shift.clockIn;
+              if (msByDays.length === 0) {
+                msByDays.push(0);
+              }
               if (msFromMidnight !== 0) {
                 msByDays[msByDays.length - 1] += msFromMidnight;
                 msFromMidnight = 0;
@@ -73,8 +76,11 @@ export class EmployeeService {
               msByDays.push(0);
               const msUntilMidnight = millisecondsUntilMidnight(shift.clockIn);
               msByDays[msByDays.length - 1] += msUntilMidnight;
-              msFromMidnight = shift.clockOut - msUntilMidnight;
+              msFromMidnight = shift.clockOut - shift.clockIn - msUntilMidnight;
             }
+          }
+          if (msFromMidnight !== 0) {
+            msByDays.push(msFromMidnight);
           }
 
           const result = {
@@ -98,7 +104,7 @@ export class EmployeeService {
   }
 
   groupEmployeesShifts(ids?: string[]): Observable<EmployeeWithShifts[]> {
-    return combineLatest([this.employees$, this.shifts$]).pipe(
+    return combineLatest([this.getEmployees(), this.getShifts()]).pipe(
       filter(([employees, shifts]) => !!employees && !!shifts),
       map(([employees, shifts]) => {
         const result = (employees as Employee[]).map(
