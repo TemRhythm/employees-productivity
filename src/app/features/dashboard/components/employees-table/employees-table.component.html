@@ -22,9 +22,7 @@
 
   <ng-container matColumnDef="totalClocked">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Total clocked</th>
-    <td mat-cell *matCellDef="let row">
-      {{ row.totalClocked | date : "hh:mm" }}
-    </td>
+    <td mat-cell *matCellDef="let row">{{ row.totalClocked | number : "1.0-0" }} h.</td>
   </ng-container>
 
   <ng-container matColumnDef="regularPaid">

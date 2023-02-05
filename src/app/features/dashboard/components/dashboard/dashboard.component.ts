@@ -3,6 +3,7 @@ import { EmployeeService } from '../../services/employee.service';
 import { map, shareReplay } from 'rxjs/operators';
 import { filter, combineLatest } from 'rxjs';
 import { Shift } from '../../models/shift';
+import { msToHours } from '../../../../../utils/date';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,7 @@ export class DashboardComponent {
   paidForOvertimeHours$ = this.employeeService.getOvertimeHoursTotalPaid();
   totalTime$ = this.shifts$.pipe(
     filter((shifts) => !!shifts),
-    map((shifts) => (shifts as Shift[]).reduce((acc, curr) => acc + curr.clockOut - curr.clockIn, 0))
+    map((shifts) => msToHours((shifts as Shift[]).reduce((acc, curr) => acc + curr.clockOut - curr.clockIn, 0)))
   );
 
   constructor(private employeeService: EmployeeService) {}
