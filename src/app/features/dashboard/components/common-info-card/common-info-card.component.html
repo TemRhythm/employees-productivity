@@ -1,0 +1,11 @@
+<mat-card class="common-info-card">
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="common-info-card__content" [class.common-info-card__content--loading]="contentLoading">
+    <mat-spinner class="common-info-card__spinner" *ngIf="contentLoading; else contentTpl"></mat-spinner>
+    <ng-template #contentTpl>
+      <ng-content></ng-content>
+    </ng-template>
+  </mat-card-content>
+</mat-card>

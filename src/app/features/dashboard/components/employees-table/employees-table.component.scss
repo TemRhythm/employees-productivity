@@ -1,0 +1,12 @@
+@import "variables";
+
+.app-employees-table {
+  width: 100%;
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: $gutter-size * .5;
+  }
+}
+

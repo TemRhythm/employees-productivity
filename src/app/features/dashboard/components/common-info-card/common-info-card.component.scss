@@ -1,0 +1,22 @@
+@import "src/scss/variables";
+
+.common-info-card {
+  position: absolute;
+  top: $gutter-size;
+  left: $gutter-size;
+  right: $gutter-size;
+  bottom: $gutter-size;
+  &__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: $gutter-size * 2;
+    font-size: 48px;
+    &--loading {
+      margin-top: $gutter-size;
+    }
+  }
+  &__icon {
+    margin-right: $gutter-size * 0.5;
+  }
+}

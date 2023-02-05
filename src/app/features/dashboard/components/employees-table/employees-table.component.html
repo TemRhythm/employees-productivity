@@ -1,0 +1,55 @@
+<table mat-table class="app-employees-table" matSort aria-label="Elements">
+  <ng-container matColumnDef="select">
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td mat-cell *matCellDef="let row">
+      <mat-checkbox
+        (click)="$event.stopPropagation()"
+        (change)="$event ? selection.toggle(row) : null"
+        [checked]="selection.isSelected(row)"
+      >
+      </mat-checkbox>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+    <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+    <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="totalClocked">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Total clocked</th>
+    <td mat-cell *matCellDef="let row">
+      {{ row.totalClocked | date : "hh:mm" }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="regularPaid">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Regular paid</th>
+    <td mat-cell *matCellDef="let row">{{ row.regularPaid | currency }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="overtimePaid">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header>Overtime paid</th>
+    <td mat-cell *matCellDef="let row">{{ row.overtimePaid | currency }}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+<div class="app-employees-table__actions">
+  <button [disabled]="selection.selected.length === 0" mat-raised-button color="primary" (click)="openEditDialog()">
+    Edit
+  </button>
+  <mat-paginator
+    [length]="dataSource.data.length"
+    [pageIndex]="0"
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</div>

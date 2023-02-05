@@ -1,0 +1,23 @@
+@import "variables";
+
+.app-dashboard {
+  &__title {
+    margin: $gutter-size $gutter-size 0;
+  }
+  &__card-icon {
+    margin-right: $gutter-size * 0.5;
+  }
+  &__employees-card {
+    margin: $gutter-size;
+    &-spinner {
+      margin: 0 auto;
+    }
+  }
+  &__common-info-card-currency-content {
+    display: flex;
+    align-items: center;
+    padding-top: $gutter-size * .5;
+    font-size: 32px;
+  }
+}
+

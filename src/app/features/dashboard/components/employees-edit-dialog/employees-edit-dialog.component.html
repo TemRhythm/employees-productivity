@@ -1,0 +1,92 @@
+<div mat-dialog-content>
+  <div class="employee-details" *ngFor="let employee of employees; let index = index">
+    <h3>Employee {{ index + 1 }}</h3>
+    <div class="employee-details__main-info">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="employee.name" />
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Hourly rate</mat-label>
+        <input matInput type="number" [(ngModel)]="employee.hourlyRate" />
+        <span matPrefix>$&nbsp;</span>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Overtime hourly rate</mat-label>
+        <input matInput type="number" [(ngModel)]="employee.hourlyRateOvertime" />
+        <span matPrefix>$&nbsp;</span>
+      </mat-form-field>
+    </div>
+    <div class="employee-details__shifts">
+      <div class="employee-details__shifts-header">
+        <h4>Shifts</h4>
+        <mat-form-field>
+          <mat-label>Choose a date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [ngModel]="selectedDates[employee.id]"
+            (ngModelChange)="filterShifts($event, employee)"
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="employee-details__shifts-table" *ngIf="filteredShifts[employee.id]?.length; else noDataForDayTmpl">
+        <table class="mat-table">
+          <thead>
+            <tr class="mat-header-row">
+              <th class="mat-header-cell">Shift</th>
+              <th class="mat-header-cell">Clock in time</th>
+              <th class="mat-header-cell">Clock out time</th>
+              <th class="mat-header-cell">Total time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="mat-row" *ngFor="let shift of filteredShifts[employee.id]; let index = index">
+              <td style="display: none">{{ shift.id }}</td>
+              <td class="mat-cell">Shift {{ index + 1 }}</td>
+              <td class="mat-cell">
+                <mat-form-field>
+                  <input
+                    matInput
+                    type="time"
+                    [ngModel]="shift.clockIn | date : 'HH:mm'"
+                    (ngModelChange)="timeChanged(shift, 'clockIn', $event)"
+                  />
+                  <span matSuffix>h</span>
+                </mat-form-field>
+              </td>
+              <td class="mat-cell">
+                <mat-form-field>
+                  <input
+                    matInput
+                    type="time"
+                    [ngModel]="shift.clockOut | date : 'HH:mm'"
+                    (ngModelChange)="timeChanged(shift, 'clockOut', $event)"
+                  />
+                  <span matSuffix>h</span>
+                </mat-form-field>
+              </td>
+              <td class="mat-cell">{{ shift.clockOut - shift.clockIn | date : "HH:mm" : "UTC" }} h</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #noDataForDayTmpl>
+        <div class="employee-details__no-data-block">No data to this day.</div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="cancel()">Cancel</button>
+  <button mat-raised-button color="primary" [disabled]="isSaving" (click)="save()">Save</button>
+  <mat-progress-bar
+    class="employee-details__saving-progress-bar"
+    [mode]="savingProgress === 0 ? 'indeterminate' : 'determinate'"
+    *ngIf="isSaving"
+    [value]="savingProgress"
+  ></mat-progress-bar>
+  <div class="mat-error employee-details__saving-error" *ngIf="isSavingError">Unsuccessful</div>
+</div>

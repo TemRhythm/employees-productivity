@@ -1,0 +1,49 @@
+<h1 class="mat-h1 app-dashboard__title">Dashboard</h1>
+<div class="grid-container">
+  <mat-grid-list cols="4" rowHeight="250">
+    <mat-grid-tile>
+      <app-common-info-card [contentLoading]="dataIsLoading$ | async" title="Employees">
+        <mat-icon class="app-dashboard__card-icon" inline>group</mat-icon>
+        <span>{{ (employees$ | async)?.length }}</span>
+      </app-common-info-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <app-common-info-card [contentLoading]="dataIsLoading$ | async" title="Clocked in time">
+        <mat-icon class="app-dashboard__common-info-card-icon" inline>schedule</mat-icon>
+        <span>{{ totalTime$ | async | date : "h" }} h.</span>
+      </app-common-info-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <app-common-info-card [contentLoading]="dataIsLoading$ | async" title="Regular hours paid">
+        <div class="app-dashboard__common-info-card-currency-content">
+          <span>{{ paidForRegularHours$ | async | currency }}</span>
+        </div>
+      </app-common-info-card>
+    </mat-grid-tile>
+    <mat-grid-tile>
+      <app-common-info-card
+        class="app-dashboard__common-info-card--currency-content"
+        [contentLoading]="dataIsLoading$ | async"
+        title="Overtime hours paid"
+      >
+        <div class="app-dashboard__common-info-card-currency-content">
+          <span>{{ paidForOvertimeHours$ | async | currency }}</span>
+        </div>
+      </app-common-info-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-card class="app-dashboard__employees-card">
+    <mat-card-header>
+      <mat-card-title>Employees</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-spinner
+        class="app-dashboard__employees-card-spinner"
+        *ngIf="dataIsLoading$ | async; else employeeTableTpl"
+      ></mat-spinner>
+      <ng-template #employeeTableTpl>
+        <app-employees-table></app-employees-table>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+</div>

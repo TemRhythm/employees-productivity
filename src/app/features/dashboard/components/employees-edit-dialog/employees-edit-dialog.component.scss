@@ -1,0 +1,37 @@
+@import "variables";
+
+.employee-details {
+  border-bottom: 1px solid black;
+  padding-bottom: $gutter-size;
+  margin-bottom: $gutter-size;
+  &__main-info {
+    display: flex;
+    justify-content: space-between;
+  }
+  &__shifts {
+    &-header {
+      display: flex;
+      justify-content: space-between;
+    }
+    &-table {
+      max-height: 300px;
+      overflow: auto;
+      position: relative;
+      table {
+        width: 100%;
+      }
+    }
+  }
+  &__no-data-block {
+    text-align: center;
+  }
+  &__saving {
+    &-progress-bar {
+      width: 50%;
+      margin-left: $gutter-size;
+    }
+    &-error {
+      margin-left: $gutter-size;
+    }
+  }
+}
